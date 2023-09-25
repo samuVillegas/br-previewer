@@ -1,95 +1,133 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import { useState } from "react";
+import {
+  Container,
+  SxProps,
+  Theme,
+  Box,
+  Stack,
+  TextField,
+  Button,
+} from "@mui/material";
+
+const styles: {
+  container: SxProps<Theme>;
+  stack: SxProps<Theme>;
+  box: SxProps<Theme>;
+  textField: SxProps<Theme>;
+  containerElements: SxProps<Theme>;
+  stackFields: SxProps<Theme>;
+} = {
+  container: {
+    width: "100vw",
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  stack: {
+    width: "90%",
+    bgcolor: "white",
+  },
+  containerElements: {
+    display: "flex",
+    justifyContent: "center",
+    my: 2,
+  },
+  box: {
+    width: "200px",
+    height: "200px",
+    bgcolor: "red",
+    m: 5,
+  },
+  stackFields: {
+    width: "100%",
+  },
+  textField: {
+    width: "100%",
+  },
+};
 
 export default function Home() {
+  const [state, setState] = useState({
+    stylesBox: {
+      ...styles.box,
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+    },
+  });
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      stylesBox: {
+        ...state.stylesBox,
+        [e.target.id]: e.target.value !== "" ? parseInt(e.target.value) : 0,
+      },
+    });
+  };
+
+  const copy = () => {
+    const css = `
+      .box{
+        border-top-left-radius: ${state.stylesBox.borderTopLeftRadius};
+        border-top-right-radius: ${state.stylesBox.borderTopRightRadius};
+        border-bottom-left-radius: ${state.stylesBox.borderBottomLeftRadius};
+        border-bottom-right-radius: ${state.stylesBox.borderBottomRightRadius};
+      }
+    `;
+    navigator.clipboard.writeText(css);
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <Container sx={styles.container}>
+      <Stack sx={styles.stack}>
+        <Container sx={styles.containerElements}>
+          <Box sx={state.stylesBox}></Box>
+        </Container>
+        <Container sx={styles.containerElements}>
+          <Stack
+            direction={{
+              xs: "column",
+              lg: "row",
+            }}
+            spacing={2}
+            sx={styles.stackFields}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+            <TextField
+              id="borderTopLeftRadius"
+              label="borderTopLeftRadius"
+              value={state.stylesBox.borderTopLeftRadius}
+              onChange={onChange}
             />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+            <TextField
+              id="borderTopRightRadius"
+              label="borderTopRightRadius"
+              value={state.stylesBox.borderTopRightRadius}
+              onChange={onChange}
+            />
+            <TextField
+              id="borderBottomLeftRadius"
+              label="borderBottomLeftRadius"
+              value={state.stylesBox.borderBottomLeftRadius}
+              onChange={onChange}
+            />
+            <TextField
+              id="borderBottomRightRadius"
+              label="borderBottomRightRadius"
+              value={state.stylesBox.borderBottomRightRadius}
+              onChange={onChange}
+            />
+          </Stack>
+        </Container>
+        <Container sx={styles.containerElements}>
+          <Button variant="contained" onClick={copy}>
+            Copy CSS
+          </Button>
+        </Container>
+      </Stack>
+    </Container>
+  );
 }
